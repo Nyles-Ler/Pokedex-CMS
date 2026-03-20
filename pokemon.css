@@ -9,3 +9,9 @@
 .pokemonlogo:hover {
     transform: rotate(-5deg) scale(1.05);
 }
+
+.pokemon {
+    float: none;
+    display: block;
+    margin: 0 auto 15px auto;
+}
