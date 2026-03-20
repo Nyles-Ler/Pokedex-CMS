@@ -21,6 +21,16 @@ main {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 10px 10px 0 #e63946;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+header,
+#mainheading,
+#navrow,
+footer {
+    width: 100%;
 }
 
 header {
@@ -28,11 +38,14 @@ header {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 15px;
     background: linear-gradient(90deg, #e63946, #ff595e, #ffca3a);
     padding: 20px;
     border-bottom: 5px solid #222;
     position: relative;
+}
+
+header > * {
+    margin: 7px;
 }
 
 .Kowskilogo {
@@ -46,13 +59,18 @@ header {
 }
 
 header nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
     list-style: none;
+    font-size: 0;
+}
+
+header nav ul li {
+    display: inline-block;
+    margin: 6px;
+    font-size: 1rem;
 }
 
 header nav a {
+    display: inline-block;
     text-decoration: none;
     color: white;
     font-weight: 700;
@@ -81,6 +99,7 @@ header input {
     border-radius: 10px;
     min-width: 180px;
     font-size: 1rem;
+    transition: all 0.25s ease;
 }
 
 header button {
@@ -128,13 +147,16 @@ header button:hover {
 
 #navrow ul {
     list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    text-align: center;
+}
+
+#navrow ul li {
+    display: inline-block;
+    margin: 8px 10px;
 }
 
 #navrow a {
+    display: inline-block;
     text-decoration: none;
     color: white;
     font-weight: 800;
@@ -152,55 +174,37 @@ header button:hover {
     transform: translateY(-4px) scale(1.05);
 }
 
-section,
-aside {
+aside,
+section {
     padding: 20px;
 }
 
-main {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    grid-template-areas:
-        "header header"
-        "mainheading mainheading"
-        "navrow navrow"
-        "aside section"
-        "footer footer";
-}
-
-header {
-    grid-area: header;
-}
-
-#mainheading {
-    grid-area: mainheading;
-}
-
-#navrow {
-    grid-area: navrow;
-}
-
 aside {
-    grid-area: aside;
+    width: 260px;
     background: linear-gradient(180deg, #f1fa8c, #ffd166);
     border-right: 5px solid #222;
 }
 
 section {
-    grid-area: section;
+    width: calc(100% - 260px);
     background-color: #fff;
 }
 
 footer {
-    grid-area: footer;
+    text-align: center;
+    background: linear-gradient(90deg, #1d3557, #457b9d);
+    color: white;
+    padding: 25px 15px;
+    border-top: 5px solid #222;
 }
 
 aside nav ul {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
     margin-bottom: 20px;
+}
+
+aside nav ul li {
+    margin-bottom: 12px;
 }
 
 aside nav a {
@@ -229,12 +233,6 @@ aside p {
     padding: 15px;
     font-weight: 600;
     box-shadow: 4px 4px 0 #222;
-}
-
-.kowskilogo {
-    width: 50px;
-    vertical-align: middle;
-    margin-right: 10px;
 }
 
 #content {
@@ -270,16 +268,13 @@ aside p {
 }
 
 #imagecontent {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-    margin: 25px 0;
     padding: 20px;
+    margin: 25px 0;
     background: linear-gradient(135deg, #ffcb05, #ffd166);
     border: 4px dashed #222;
     border-radius: 20px;
     animation: pulseBox 3s infinite;
+    overflow: hidden;
 }
 
 .pikachu {
@@ -289,6 +284,9 @@ aside p {
     border-radius: 16px;
     box-shadow: 5px 5px 0 #222;
     transition: transform 0.3s ease;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 .pikachu:hover {
@@ -296,8 +294,6 @@ aside p {
 }
 
 #imagecontent p {
-    flex: 1;
-    min-width: 220px;
     font-size: 1.1rem;
     font-weight: 700;
     color: #222;
@@ -313,13 +309,16 @@ aside p {
 
 #middlelinks ul {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
+    text-align: center;
+}
+
+#middlelinks ul li {
+    display: inline-block;
+    margin: 8px;
 }
 
 #middlelinks a {
+    display: inline-block;
     text-decoration: none;
     color: white;
     background-color: #ff006e;
@@ -336,21 +335,14 @@ aside p {
     transform: translateY(-4px);
 }
 
-footer {
-    text-align: center;
-    background: linear-gradient(90deg, #1d3557, #457b9d);
-    color: white;
-    padding: 25px 15px;
-    border-top: 5px solid #222;
-}
-
 footer ul {
     list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
     margin-bottom: 15px;
+}
+
+footer ul li {
+    display: inline-block;
+    margin: 6px 10px;
 }
 
 footer a {
@@ -415,15 +407,9 @@ a:hover::after {
 }
 
 @media (max-width: 900px) {
-    main {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "header"
-            "mainheading"
-            "navrow"
-            "aside"
-            "section"
-            "footer";
+    aside,
+    section {
+        width: 100%;
     }
 
     aside {
@@ -436,8 +422,13 @@ a:hover::after {
         text-align: center;
     }
 
+    .pikachu {
+        float: none;
+        display: block;
+        margin: 0 auto 15px auto;
+    }
+
     #imagecontent {
-        flex-direction: column;
         text-align: center;
     }
 
@@ -447,12 +438,12 @@ a:hover::after {
 }
 
 @media (max-width: 600px) {
-    header nav ul,
-    #navrow ul,
-    #middlelinks ul,
-    footer ul {
-        flex-direction: column;
-        align-items: center;
+    header nav ul li,
+    #navrow ul li,
+    #middlelinks ul li,
+    footer ul li {
+        display: block;
+        margin: 10px 0;
     }
 
     header input {
