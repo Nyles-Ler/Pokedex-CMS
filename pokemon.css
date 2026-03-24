@@ -1,17 +1,385 @@
-/* styles.css - Main stylesheet for Pokémon */
+/* pokemon.css - Pokémon themed stylesheet */
 
-.pokemonlogo {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto Condensed", sans-serif;
+    background-color: #5e5e5e;
+    background-image: repeating-linear-gradient(
+    45deg,
+    #2f2f2f,
+    #313131 20px,
+    #5b5b5b 20px,
+    #5b5b5b 40px
+    );
+    color: #1f1f1f;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+main {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #fff8dc;
+    border: 6px solid #cc0000;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 0 0 6px #222, 0 12px 30px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+header,
+#mainheading,
+#navrow,
+footer {
+    width: 100%;
+}
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #e63946, #ff595e, #ffca3a);
+    padding: 20px;
+    border-bottom: 5px solid #222;
+    position: relative;
+}
+
+header > * {
+    margin: 6px;
+}
+
+.Kowskilogo {
     width: 180px;
     max-width: 100%;
     transition: transform 0.4s ease;
 }
 
-.pokemonlogo:hover {
+.Kowskilogo:hover {
     transform: rotate(-5deg) scale(1.05);
 }
 
-.pokemon {
-    float: none;
+header nav ul {
+    list-style: none;
+    font-size: 0;
+}
+
+header nav ul li {
+    display: inline-block;
+    margin: 6px;
+    font-size: 1rem;
+}
+
+header nav a {
+    display: inline-block;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 700;
+    background: #454545;
+    padding: 8px 14px;
+    border: 3px solid #1b1b1b;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 #1b1b1b;
+    transition: all 0.25s ease;
+}
+
+header nav a:hover {
+    background: #fe222287;
+    transform: translateY(-3px);
+}
+
+header label {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1b1b1b;
+}
+
+header input {
+    padding: 10px 12px;
+    border: 3px solid #222;
+    border-radius: 999px;
+    min-width: 200px;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+header input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 203, 5, 0.45);
+}
+
+header button {
+    padding: 10px 18px;
+    border: 3px solid #222;
+    border-radius: 999px;
+    background: #ffcb05;
+    color: #1b1b1b;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #222;
+    transition: all 0.25s ease;
+}
+
+header button:hover {
+    background: #ffd84d;
+    transform: translateY(-2px);
+}
+
+#mainheading {
+    text-align: center;
+    padding: 32px 20px;
+    background: linear-gradient(to right, #cc0000 0%, #cc0000 48%, #ffffff 48%, #ffffff 52%, #222 52%, #222 56%, #ffffff 56%, #ffffff 100%);
+}
+
+#mainheading h1 {
+    font-size: 3rem;
+    color: #2a2a2a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 3px 3px 0 #fd0000, 5px 5px 0 #1b1b1b;
+    margin-bottom: 10px;
+}
+
+#mainheading h2 {
+    font-size: 1.35rem;
+    color: #2a2a2a;
+    font-weight: 700;
+}
+
+#navrow {
+    background: linear-gradient(to right, #cc0000 0%, #cc0000 48%, #ffffff 48%, #ffffff 52%, #222 52%, #222 56%, #ffffff 56%, #ffffff 100%);
+    border-bottom: 5px solid #1b1b1b;
+    padding: 14px 10px;
+}
+
+#navrow ul {
+    list-style: none;
+    text-align: center;
+}
+
+#navrow ul li {
+    display: inline-block;
+    margin: 8px 12px;
+}
+
+#navrow a {
+    display: inline-block;
+    text-decoration: none;
+    color: #1b1b1b;
+    background: #ffffff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 11px 20px;
+    border: 3px solid #1b1b1b;
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 #1b1b1b;
+    transition: all 0.25s ease;
+}
+
+#navrow a:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+aside {
+    width: 28%;
+    min-width: 240px;
+    background: #9b9b9b;
+    border-right: 4px solid #373737;
+    padding: 24px 18px;
+}
+
+section {
+    width: 72%;
+    min-width: 300px;
+    padding: 24px;
+    background: #ffffff;
+}
+
+aside p {
+    background: #ffffff;
+    border: 4px solid #3b3b3b;
+    border-radius: 20px;
+    padding: 18px;
+    text-align: center;
+    font-weight: 700;
+    color: #1b1b1b;
+    box-shadow: 4px 4px 0 #1b1b1b;
+}
+
+aside .pokemon {
+    width: 160px;
+    max-width: 100%;
     display: block;
-    margin: 0 auto 15px auto;
+    margin: 0 auto 14px auto;
+    transition: transform 0.35s ease;
+}
+
+aside .pokemon:hover {
+    transform: scale(1.08);
+}
+
+#content {
+    background: #bebebe;
+    border: 4px solid #3b3b3b;
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 5px 5px 0 #1b1b1b;
+}
+
+#content h3 {
+    font-size: 2rem;
+    color: #000000;
+    margin-bottom: 18px;
+    border-bottom: 4px solid #3b3b3b;
+    padding-bottom: 8px;
+}
+
+.p1,
+.middle-paragraph {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+}
+
+#imagecontent {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: #d7d7d7;
+    border: 4px solid #3b3b3b;
+    border-radius: 22px;
+    padding: 20px;
+    margin: 24px 0;
+    box-shadow: 4px 4px 0 #1b1b1b;
+}
+
+#imagecontent .pokemon {
+    width: 180px;
+    max-width: 100%;
+    flex-shrink: 0;
+    display: block;
+    transition: transform 0.35s ease;
+}
+
+#imagecontent .pokemon:hover {
+    transform: scale(1.08) rotate(-3deg);
+}
+
+#imagecontent p {
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.pokemon {
+    display: block;
+    margin: 0 auto 12px auto;
+    max-width: 100%;
+}
+
+footer {
+    background: linear-gradient(to right, #cc0000, #a30000);
+    color: #ffffff;
+    text-align: center;
+    padding: 24px 20px;
+    border-top: 6px solid #1b1b1b;
+}
+
+footer nav ul {
+    list-style: none;
+    margin-bottom: 14px;
+}
+
+footer nav ul li {
+    display: inline-block;
+    margin: 6px 10px;
+}
+
+footer nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    background: #373737;
+    padding: 8px 14px;
+    border: 2px solid #ffffff;
+    border-radius: 999px;
+    transition: all 0.25s ease;
+}
+
+footer nav a:hover {
+    background: #cc0000;
+    color: #1b1b1b;
+}
+
+footer p {
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+.p2 {
+    font-weight: 700;
+}
+
+@media (max-width: 900px) {
+    aside,
+    section {
+        width: 100%;
+    }
+
+    aside {
+        border-right: none;
+        border-bottom: 4px solid #2a75bb;
+    }
+
+    #imagecontent {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #mainheading h1 {
+        font-size: 2.3rem;
+    }
+
+    #mainheading h2 {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    header input {
+        min-width: 140px;
+        width: 100%;
+        max-width: 260px;
+    }
+
+    #navrow ul li,
+    header nav ul li,
+    footer nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    #content {
+        padding: 20px;
+    }
+
+    #content h3 {
+        font-size: 1.6rem;
+    }
+
+    #mainheading h1 {
+        font-size: 1.9rem;
+    }
 }
