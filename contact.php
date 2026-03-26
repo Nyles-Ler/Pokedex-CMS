@@ -1,3 +1,5 @@
+/* contact.php - A simple contact form that validates input and displays a success message. */
+
 <?php
 session_start();
 

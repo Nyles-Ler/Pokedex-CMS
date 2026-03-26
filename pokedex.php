@@ -1,7 +1,10 @@
+/* pokedex.php - A page to display all Pokémon entries in the database. */
+
 <?php
 session_start();
 require('db_connect.php');
 
+/* query all Pokémon from database */
 $query = "SELECT * FROM pokemon ORDER BY pokedex_number ASC";
 $statement = $db->prepare($query);
 $statement->execute();
@@ -25,9 +28,11 @@ $statement->execute();
 
             <nav aria-label="User Navigation">
                 <ul>
+                    /* show login/logout links based on session */
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="logout.php">Log Out</a></li>
 
+                        /* if admin, show link to admin dashboard */
                         <?php if ($_SESSION['role'] === 'admin'): ?>
                             <li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
                         <?php endif; ?>
@@ -72,7 +77,8 @@ $statement->execute();
         <section>
             <article id="content">
                 <h3>Pokédex Entries</h3>
-
+                
+                /* if Pokémon found, loop through and display each entry */
                 <?php if ($statement->rowCount() > 0): ?>
                     <?php while ($pokemon = $statement->fetch()): ?>
                         <p class="p1">

@@ -1,11 +1,15 @@
+/* forgot_password.php - A simple form to check if a username exists in the database.
+
 <?php
 session_start();
 require('db_connect.php');
 
 $message = "";
 
+/* if form submitted, check if username exists in database */
 if ($_POST && !empty($_POST['username'])):
 
+    /* sanitize input */
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     $query = "SELECT * FROM users WHERE username = :username LIMIT 1";
@@ -19,7 +23,7 @@ if ($_POST && !empty($_POST['username'])):
         // Doesnt connect to anything
         $message = "User found. Please contact admin to reset your password.";
     else:
-        $message = "No account found with that username.";
+        $message = "No account found with that username. Please try again.";
     endif;
 
 endif;
@@ -43,9 +47,11 @@ endif;
 
             <nav aria-label="User Navigation">
                 <ul>
+                    /* show login/logout links based on session */
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="logout.php">Log Out</a></li>
 
+                        /* if admin, show link to admin dashboard */
                         <?php if ($_SESSION['role'] === 'admin'): ?>
                             <li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
                         <?php endif; ?>

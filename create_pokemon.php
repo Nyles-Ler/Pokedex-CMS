@@ -1,11 +1,17 @@
+/* create_pokemon.php - A form to create a new Pokémon entry in the database.
+Validates input and displays a success message. */
+
 <?php
+/* admin users only */
 require('authenticate.php');
 require('db_connect.php');
 
+/* get the types for the dropdowns */
 $types_query = "SELECT name FROM types ORDER BY name ASC";
 $types_statement = $db->prepare($types_query);
 $types_statement->execute();
 
+/* if form was submitted, validate and insert new Pokémon */
 if ($_POST
     && !empty($_POST['pokedex_number'])
     && !empty($_POST['name'])
@@ -18,6 +24,7 @@ if ($_POST
     && !empty($_POST['speed_stat'])
     && !empty($_POST['description'])):
 
+    /* sanitize input */
     $pokedex_number = filter_input(INPUT_POST, 'pokedex_number', FILTER_SANITIZE_NUMBER_INT);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $type1 = filter_input(INPUT_POST, 'type1', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -33,6 +40,7 @@ if ($_POST
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $image = filter_input(INPUT_POST, 'image', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+    /* handle optional fields */
     if ($type2 === ''):
         $type2 = null;
     endif;
@@ -49,6 +57,7 @@ if ($_POST
         $image = null;
     endif;
 
+    /* insert new Pokémon into database */
     $query = "INSERT INTO pokemon
                 (pokedex_number, name, type1, type2, hp, attack_stat, defense_stat,
                  special_attack, special_defense, speed_stat, height, weight, description, image)
@@ -56,7 +65,9 @@ if ($_POST
                 (:pokedex_number, :name, :type1, :type2, :hp, :attack_stat, :defense_stat,
                  :special_attack, :special_defense, :speed_stat, :height, :weight, :description, :image)";
 
+    /* prepare and execute query */
     $statement = $db->prepare($query);
+    /* bind values */
     $statement->bindValue(':pokedex_number', $pokedex_number, PDO::PARAM_INT);
     $statement->bindValue(':name', $name);
     $statement->bindValue(':type1', $type1);
@@ -73,8 +84,10 @@ if ($_POST
     $statement->bindValue(':image', $image);
     $statement->execute();
 
+    /* set success message */
     $message = "Pokémon created successfully.";
 
+    /* re-query types for the dropdowns */
     $types_statement = $db->prepare($types_query);
     $types_statement->execute();
 
@@ -96,6 +109,7 @@ endif;
 		<main>
 		    <h1>Create Pokémon</h1>
 
+            /* display success message if set */
 		    <?php if (isset($message)): ?>
 		        <p><?= $message ?></p>
 		    <?php endif; ?>
@@ -110,7 +124,9 @@ endif;
 		        <label for="type1">Primary Type</label>
 		        <select id="type1" name="type1" required>
 		            <option value="">Select a type</option>
+                    /* show types in dropdown */
 		            <?php while ($type = $types_statement->fetch()): ?>
+                        /* show type as option in dropdown */
 		                <option value="<?= $type['name'] ?>"><?= $type['name'] ?></option>
 		            <?php endwhile; ?>
 		        </select>
@@ -123,6 +139,7 @@ endif;
 		        <label for="type2">Secondary Type</label>
 		        <select id="type2" name="type2">
 		            <option value="">No secondary type</option>
+                    /* show types in dropdown */
 		            <?php while ($type = $types_statement->fetch()): ?>
 		                <option value="<?= $type['name'] ?>"><?= $type['name'] ?></option>
 		            <?php endwhile; ?>

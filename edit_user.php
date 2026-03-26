@@ -1,3 +1,5 @@
+/* edit_user.php - A page to edit an existing user in the database. Admin users only. */
+
 <?php
 require('authenticate.php'); // 7.1 admin only access
 require('db_connect.php');
@@ -8,6 +10,7 @@ if ($_POST
     && !empty($_POST['username'])
     && !empty($_POST['role'])):
 
+    /* sanitize input */
     $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -45,11 +48,13 @@ if ($_POST
         $statement->execute();
     endif;
 
+    /* redirect back to edit page to show updated info */
     header("Location: edit_user.php?id={$id}");
     exit;
 
 elseif (isset($_GET['id'])):
 
+    /* sanitize input */
     $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
     $query = "SELECT id, username, role FROM users WHERE id = :id LIMIT 1";
@@ -63,6 +68,7 @@ else:
     $id = false;
 endif;
 
+/* query users to display list of users with edit links */
 $list_query = "SELECT id, username, role FROM users ORDER BY username ASC";
 $list_statement = $db->prepare($list_query);
 $list_statement->execute();
@@ -80,8 +86,10 @@ $list_statement->execute();
         <h1>Edit User</h1>
 
         <ul class="user-list">
+            /* loop through users and display with edit link */
             <?php while ($user_row = $list_statement->fetch()): ?>
                 <li>
+                    /* show username and role with link to edit page */
                     <a href="edit_user.php?id=<?= $user_row['id'] ?>">
                         <?= $user_row['username'] ?> (<?= $user_row['role'] ?>)
                     </a>
@@ -89,6 +97,7 @@ $list_statement->execute();
             <?php endwhile; ?>
         </ul>
 
+        /* if user selected, show edit form pre-filled with user data */
         <?php if ($id && $user): ?>
             <form method="post" action="edit_user.php">
                 <input type="hidden" name="id" value="<?= $user['id'] ?>">

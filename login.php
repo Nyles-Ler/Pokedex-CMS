@@ -1,11 +1,16 @@
+/* login.php - A simple login page that authenticates users against the database
+and starts a session. */
+
 <?php
 session_start();
 require('db_connect.php');
 
 $error = '';
 
+/* if form submitted, validate credentials and log in user */
 if($_POST && !empty($_POST['username']) && !empty($_POST['password'])) {
     
+    /* sanitize input */
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $password = $_POST['password'];
 

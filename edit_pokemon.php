@@ -1,9 +1,13 @@
+/* edit_pokemon.php - A page to edit an existing Pokémon entry in the database. Admin users only. */
+
 <?php
 require('authenticate.php');
 require('db_connect.php');
 
+/* query types for dropdowns */
 $types_query = "SELECT name FROM types ORDER BY name ASC";
 
+/* if form was submitted, validate and update Pokémon */
 if ($_POST
     && isset($_POST['id'])
     && !empty($_POST['pokedex_number'])
@@ -17,6 +21,7 @@ if ($_POST
     && !empty($_POST['speed_stat'])
     && !empty($_POST['description'])):
 
+    /* sanitize input */
     $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
     $pokedex_number = filter_input(INPUT_POST, 'pokedex_number', FILTER_SANITIZE_NUMBER_INT);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -32,7 +37,8 @@ if ($_POST
     $weight = filter_input(INPUT_POST, 'weight', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $image = filter_input(INPUT_POST, 'image', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+    
+    /* handle optional fields */
     if ($type2 === ''):
         $type2 = null;
     endif;
@@ -49,6 +55,7 @@ if ($_POST
         $image = null;
     endif;
 
+    /* update Pokémon in database */
     $query = "UPDATE pokemon
               SET pokedex_number = :pokedex_number,
                   name = :name,
@@ -84,18 +91,23 @@ if ($_POST
     $statement->bindValue(':id', $id, PDO::PARAM_INT);
     $statement->execute();
 
+    /* redirect back to edit page with success message */
     header("Location: edit_pokemon.php?id={$id}");
     exit;
 
+/* if form not submitted but id is in query string, fetch Pokémon to edit */
 elseif (isset($_GET['id'])):
 
+    /* sanitize input */
     $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
+    /* query Pokémon from database */
     $query = "SELECT * FROM pokemon WHERE id = :id LIMIT 1";
     $statement = $db->prepare($query);
     $statement->bindValue(':id', $id, PDO::PARAM_INT);
     $statement->execute();
 
+    /* fetch Pokémon to edit */
     $pokemon = $statement->fetch();
 
 else:
@@ -105,6 +117,7 @@ endif;
 $types_statement = $db->prepare($types_query);
 $types_statement->execute();
 
+/* query Pokémon to display list */
 $list_query = "SELECT id, pokedex_number, name FROM pokemon ORDER BY pokedex_number ASC";
 $list_statement = $db->prepare($list_query);
 $list_statement->execute();
@@ -127,15 +140,17 @@ $list_statement->execute();
 
 		    <h2>Select a Pokémon</h2>
 		    <ul class="pokemon-list">
+                /* loop through Pokémon and display with edit link */
 		        <?php while ($pokemon_row = $list_statement->fetch()): ?>
 		            <li>
+                        /* show Pokémon name and link to edit page */
 		                <a href="edit_pokemon.php?id=<?= $pokemon_row['id'] ?>">
 		                    #<?= $pokemon_row['pokedex_number'] ?> - <?= $pokemon_row['name'] ?>
 		                </a>
 		            </li>
 		        <?php endwhile; ?>
 		    </ul>
-
+            /* if Pokémon selected, show edit form pre-filled with Pokémon data */
 		    <?php if ($id && $pokemon): ?>
 		        <form method="post" action="edit_pokemon.php">
 		            <input type="hidden" name="id" value="<?= $pokemon['id'] ?>">

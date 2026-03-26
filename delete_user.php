@@ -1,3 +1,5 @@
+/* delete_user.php - A page to delete a user from the database. Admin users only. */
+
 <?php
 require('authenticate.php'); // 7.1 admin only access
 require('db_connect.php');

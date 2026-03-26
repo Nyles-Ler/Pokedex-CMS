@@ -1,3 +1,5 @@
+/* db_connect.php - A simple script to connect to the MySQL database using PDO. */
+
 <?php
 define('DB_DSN','mysql:host=localhost;dbname=serverside;charset=utf8');
 define('DB_USER','serveruser');
