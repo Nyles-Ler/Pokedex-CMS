@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,25 +15,34 @@
     <link rel="stylesheet" href="styles.css">
     <title>Kowski Komics</title>
 </head>
-	<body>
+	<body class="page-home">
 		<main>
 			<header>
 				<img class="Kowskilogo" src="images/kowskilogo.jpg" alt="Kowski Komics Logo">
 			
 				<nav aria-label="User Navigation">
 					<ul>
-						<li><a href="#">Log In</a></li>
-						<li><a href="#">Forgot Password</a></li>
-						<li><a href="#">????</a></li>
-						<li><a href="#">Create Account</a></li>
-						<li><a href="#">Terms of Service</a></li>
-						<li><a href="#">Contact Us</a></li>
+						<?php if (isset($_SESSION['user_id'])): ?>
+							<li><a href="logout.php">Log Out</a></li>
+
+							<?php if ($_SESSION['role'] === 'admin'): ?>
+								<li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
+							<?php endif; ?>
+
+							<?php else: ?>
+								<li><a href="login.php">Log In</a></li>
+						<?php endif; ?>
+						<li><a href="index.php">Home</a></li>
+						<li><a href="forgot_password.php">Forgot Password</a></li>
+						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
 
-				<label for="search">Search</label>
-				<input id="search" type="text">
-				<button type="submit">Search</button>
+				<div class="search-group">
+					<label for="search">Search</label>
+					<input id="search" type="text">
+					<button type="submit">Search</button>
+				</div>
 			</header>
 
 			<div id="mainheading">
@@ -36,11 +50,31 @@
 				<h2><i>Discover your favourite Pokémon and learn more about them!</i></h2>
 			</div>
 
+			<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
+				<section>
+					<article id="admin-dashboard" class="admin-card">
+						<h3>Admin Dashboard</h3>
+						<p>Welcome back, <?= $_SESSION['username']; ?>!</p>
+						<nav aria-label="Admin-Navigation">
+							<ul class="admin-links">
+								<li><a href="create_pokemon.php">Create Pokemon</a></li>
+								<li><a href="edit_pokemon.php">Update Pokemon</a></li>
+								<li><a href="delete_pokemon.php">Delete Pokemon</a></li>
+								<li><a href="manage_users.php">View Users</a></li>
+								<li><a href="create_user.php">Create User</a></li>
+								<li><a href="edit_users.php">Edit User</a></li>
+								<li><a href="dele_user.php">Manage User</a></li>
+							</ul>
+						</nav>
+					</article>
+				</section>
+			<?php endif; ?>			
+
 			<div id="navrow">
 				<nav aria-label="Main Navigation">
 					<ul>
-						<li><a href="pokedex.html">Browse Pokédex</a></li>
-						<li><a href="pokemontypes.html">Explore Pokémon Types</a></li>
+						<li><a href="pokedex.php">Browse Pokédex</a></li>
+						<li><a href="pokemontypes.php">Explore Pokémon Types</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -54,7 +88,7 @@
 						<li><a href="#">News & Blog</a></li>
 						<li><a href="#">Frequently Asked Questions</a></li>
 						<li><a href="#">Join the Kowski Mailing List</a></li>
-						<li><a href="#">Contact Us</a></li>
+						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
 				<p><img class="Kowskilogo" src="images/kowskilogo.jpg" alt="Kowski Logo">Welcome to Kowski Komics, Winnipeg’s 
@@ -86,24 +120,23 @@
     			<div id="middlelinks">
 					<nav aria-label="Middle Navigation">
         				<ul>
-          					<li><a href="#">A message from Kowski</a></li>
+          					<li><a href="kowskis_message.php">A message from Kowski</a></li>
           					<li><a href="#">Upcoming Events</a></li>
           					<li><a href="#">Meet our Team!</a></li>
         				</ul>
       				</nav>
 				</div>
 			</article>
-
 		</section>
 
 			<footer>
 				<nav aria-label="Footer Navigation">
 					<ul>
 						<li><a href="#">Home</a></li>
-						<li><a href="#">Pokedex</a></li>
-						<li><a href="#">Pokemon Types</a></li>
+						<li><a href="pokedex.php">Pokedex</a></li>
+						<li><a href="pokemontypes.php">Pokemon Types</a></li>
 						<li><a href="#">Our Staff</a></li>
-						<li><a href="#">Contact Us</a></li>
+						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
 				<p>Copyright &copy; 2026 Kowski Komics. All rights reserved.</p>
