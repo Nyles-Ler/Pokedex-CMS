@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "editor-browser",
+      "type": "firefox",
       "request": "launch",
-      "name": "Launch in VS Code Browser",
-      "url": "http://127.0.0.1:5500/index.html",
+      "name": "Launch Firefox",
+      "url": "http://127.0.0.1:5500/index.php",
       "webRoot": "${workspaceFolder}"
     }
   ]
