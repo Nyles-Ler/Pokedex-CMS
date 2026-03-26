@@ -1,5 +1,5 @@
-/* index.php - The homepage of the Kowski Komics website.
-Displays a welcome message, navigation links, and an admin dashboard for logged-in admin users. */
+// index.php - The homepage of the Kowski Komics website.
+// Displays a welcome message, navigation links, and an admin dashboard for logged-in admin users.
 
 <?php
 session_start();
