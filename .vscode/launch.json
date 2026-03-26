@@ -2,9 +2,9 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "msedge",
+      "type": "editor-browser",
       "request": "launch",
-      "name": "Launch Edge",
+      "name": "Launch in VS Code Browser",
       "url": "http://127.0.0.1:5500/index.html",
       "webRoot": "${workspaceFolder}"
     }
