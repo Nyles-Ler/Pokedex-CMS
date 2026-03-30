@@ -1,5 +1,5 @@
-/* kowskis_message.php - A simple page to display a message.
-Used for testing session and authentication. */
+<!-- kowskis_message.php - A simple page to display a message.
+Used for testing session and authentication. -->
 
 <?php
 session_start();

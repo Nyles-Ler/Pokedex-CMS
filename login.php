@@ -1,5 +1,5 @@
-/* login.php - A simple login page that authenticates users against the database
-and starts a session. */
+<!-- login.php - A simple login page that authenticates users against the database
+and starts a session. -->
 
 <?php
 session_start();

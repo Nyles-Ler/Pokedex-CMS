@@ -1,5 +1,5 @@
-// index.php - The homepage of the Kowski Komics website.
-// Displays a welcome message, navigation links, and an admin dashboard for logged-in admin users.
+<!-- index.php - The homepage of the Kowski Komics website.
+Displays a welcome message, navigation links, and an admin dashboard for logged-in admin users. -->
 
 <?php
 session_start();
@@ -25,13 +25,13 @@ session_start();
 			
 				<nav aria-label="User Navigation">
 					<ul>
-						/* show login/logout links based on session */
+						<!-- show login/logout links based on session -->
 						<?php if (isset($_SESSION['user_id'])): ?>
 							<li><a href="logout.php">Log Out</a></li>
 
-							/* if admin, show link to admin dashboard */
+							<!-- if admin, show link to admin dashboard -->
 							<?php if ($_SESSION['role'] === 'admin'): ?>
-								/* show link to admin dashboard for admin users */
+								<!-- show link to admin dashboard for admin users -->
 								<li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
 							<?php endif; ?>
 
@@ -56,7 +56,7 @@ session_start();
 				<h2><i>Discover your favourite Pokémon and learn more about them!</i></h2>
 			</div>
 			
-			/* if user is logged in and is admin, show admin dashboard section */
+			<!-- if user is logged in and is admin, show admin dashboard section -->
 				<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
 				<section>
 					<article id="admin-dashboard" class="admin-card">
@@ -75,28 +75,7 @@ session_start();
 						</nav>
 					</article>
 				</section>
-				<?php endif; ?>
-			
-			/* main navigation links */
-			<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
-				<section>
-					<article id="admin-dashboard" class="admin-card">
-						<h3>Admin Dashboard</h3>
-						<p>Welcome back, <?= $_SESSION['username']; ?>!</p>
-						<nav aria-label="Admin-Navigation">
-							<ul class="admin-links">
-								<li><a href="create_pokemon.php">Create Pokemon</a></li>
-								<li><a href="edit_pokemon.php">Update Pokemon</a></li>
-								<li><a href="delete_pokemon.php">Delete Pokemon</a></li>
-								<li><a href="manage_users.php">View Users</a></li>
-								<li><a href="create_user.php">Create User</a></li>
-								<li><a href="edit_users.php">Edit User</a></li>
-								<li><a href="dele_user.php">Manage User</a></li>
-							</ul>
-						</nav>
-					</article>
-				</section>
-			<?php endif; ?>			
+				<?php endif; ?>		
 
 			<div id="navrow">
 				<nav aria-label="Main Navigation">

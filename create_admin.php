@@ -1,4 +1,4 @@
-/* create_admin.php - A script to create an admin user in the database. */
+<!-- create_admin.php - A script to create an admin user in the database. -->
 
 <?php
 /* db connection */

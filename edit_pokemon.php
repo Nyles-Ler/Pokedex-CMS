@@ -1,4 +1,4 @@
-/* edit_pokemon.php - A page to edit an existing Pokémon entry in the database. Admin users only. */
+<!-- edit_pokemon.php - A page to edit an existing Pokémon entry in the database. Admin users only. -->
 
 <?php
 require('authenticate.php');
@@ -140,17 +140,17 @@ $list_statement->execute();
 
 		    <h2>Select a Pokémon</h2>
 		    <ul class="pokemon-list">
-                /* loop through Pokémon and display with edit link */
+                <!-- loop through Pokémon and display with edit link -->
 		        <?php while ($pokemon_row = $list_statement->fetch()): ?>
 		            <li>
-                        /* show Pokémon name and link to edit page */
+                        <!-- show Pokémon name and link to edit page -->
 		                <a href="edit_pokemon.php?id=<?= $pokemon_row['id'] ?>">
 		                    #<?= $pokemon_row['pokedex_number'] ?> - <?= $pokemon_row['name'] ?>
 		                </a>
 		            </li>
 		        <?php endwhile; ?>
 		    </ul>
-            /* if Pokémon selected, show edit form pre-filled with Pokémon data */
+            <!-- if Pokémon selected, show edit form pre-filled with Pokémon data -->
 		    <?php if ($id && $pokemon): ?>
 		        <form method="post" action="edit_pokemon.php">
 		            <input type="hidden" name="id" value="<?= $pokemon['id'] ?>">

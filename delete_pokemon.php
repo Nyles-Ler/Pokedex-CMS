@@ -1,4 +1,4 @@
-/* delete_pokemon.php - A page to delete a Pokémon entry from the database. Admin users only. */
+<!-- delete_pokemon.php - A page to delete a Pokémon entry from the database. Admin users only. -->
 
 <?php
 require('authenticate.php');

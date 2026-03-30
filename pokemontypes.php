@@ -1,4 +1,4 @@
-/* pokemontypes.php - A page to display all Pokémon types in the database. */
+<!-- pokemontypes.php - A page to display all Pokémon types in the database. -->
 
 <?php
 session_start();

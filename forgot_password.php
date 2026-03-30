@@ -1,4 +1,4 @@
-/* forgot_password.php - A simple form to check if a username exists in the database.
+<!-- forgot_password.php - A simple form to check if a username exists in the database. -->
 
 <?php
 session_start();
@@ -47,11 +47,11 @@ endif;
 
             <nav aria-label="User Navigation">
                 <ul>
-                    /* show login/logout links based on session */
+                    <!-- show login/logout links based on session -->
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="logout.php">Log Out</a></li>
 
-                        /* if admin, show link to admin dashboard */
+                        <!-- if admin, show link to admin dashboard -->
                         <?php if ($_SESSION['role'] === 'admin'): ?>
                             <li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
                         <?php endif; ?>

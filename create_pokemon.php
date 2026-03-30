@@ -1,15 +1,50 @@
-/* create_pokemon.php - A form to create a new Pokémon entry in the database.
-Validates input and displays a success message. */
+<!-- create_pokemon.php - A form to create a new Pokémon entry in the database.
+Validates input and displays a success message. -->
 
 <?php
 /* admin users only */
 require('authenticate.php');
 require('db_connect.php');
 
+/* set upload messages */
+$image_message = '';
+$pokemon_message = '';
+
 /* get the types for the dropdowns */
 $types_query = "SELECT name FROM types ORDER BY name ASC";
 $types_statement = $db->prepare($types_query);
 $types_statement->execute();
+
+$image_path = null;
+
+if (isset($_FILES['image']) && $_FILES['image']['error'] === 0):
+
+    $image_filename = basename($_FILES['image']['name']);
+    $temporary_path = $_FILES['image']['tmp_name'];
+
+    // Allowed types
+    $allowed_types = ['image/jpg', 'image/png', 'image/gif'];
+
+    // Validate file types
+    if (in_array($_FILES['image']['type'], $allowed_types)):
+
+        // Set destination folder
+        $upload_folder = 'images/';
+        $image_path = $upload_folder . $image_filename;
+
+        // Move file to folder
+        if (move_uploaded_file($temporary_path, $image_path)):
+            $image_message = "Image uploaded successfully.";
+        else:
+            $image_message = "Image upload unsuccessful.";
+        endif;
+    else:
+        $image_message = "Invalid image type. Only JPG, PNG, GIF allowed.";
+    endif;
+
+elseif (isset($_FILES['image']) && $_FILES['image']['error'] > 0):
+    $image_message = "Error uploading file.";
+endif;
 
 /* if form was submitted, validate and insert new Pokémon */
 if ($_POST
@@ -38,7 +73,7 @@ if ($_POST
     $height = filter_input(INPUT_POST, 'height', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $weight = filter_input(INPUT_POST, 'weight', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $image = filter_input(INPUT_POST, 'image', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $image = $image_path;
 
     /* handle optional fields */
     if ($type2 === ''):
@@ -82,10 +117,11 @@ if ($_POST
     $statement->bindValue(':weight', $weight);
     $statement->bindValue(':description', $description);
     $statement->bindValue(':image', $image);
-    $statement->execute();
-
-    /* set success message */
-    $message = "Pokémon created successfully.";
+    if ($statement->execute()):
+        $pokemon_message = "Pokemon entered successfully!";
+    else:
+        $pokemon_message = "Pokemon failed to upload!";
+    endif;
 
     /* re-query types for the dropdowns */
     $types_statement = $db->prepare($types_query);
@@ -109,12 +145,15 @@ endif;
 		<main>
 		    <h1>Create Pokémon</h1>
 
-            /* display success message if set */
-		    <?php if (isset($message)): ?>
-		        <p><?= $message ?></p>
+            <!-- display success message if set -->
+		    <?php if ($image_message): ?>
+		        <p><?= htmlspecialchars($image_message) ?></p>
 		    <?php endif; ?>
+            <?php if ($pokemon_message): ?>
+                <p><?= htmlspecialchars($pokemon_message) ?></p>
+            <?php endif; ?>
 
-		    <form method="post" action="create_pokemon.php">
+		    <form method="post" action="create_pokemon.php" enctype="multipart/form-data">
 		        <label for="pokedex_number">Pokédex Number</label>
 		        <input id="pokedex_number" name="pokedex_number" type="number" required>
 
@@ -173,7 +212,7 @@ endif;
 		        <textarea id="description" name="description" required></textarea>
 
 		        <label for="image">Image Path</label>
-		        <input id="image" name="image" type="text" placeholder="images/pikachu.png">
+		        <input id="image" name="image" type="file" placeholder="images/pikachu.png">
 
 		        <input type="submit" value="Create Pokémon">
 		    </form>

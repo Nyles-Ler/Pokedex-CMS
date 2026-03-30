@@ -1,4 +1,4 @@
-/* edit_user.php - A page to edit an existing user in the database. Admin users only. */
+<!-- edit_user.php - A page to edit an existing user in the database. Admin users only. -->
 
 <?php
 require('authenticate.php'); // 7.1 admin only access
@@ -86,10 +86,10 @@ $list_statement->execute();
         <h1>Edit User</h1>
 
         <ul class="user-list">
-            /* loop through users and display with edit link */
+            <!-- loop through users and display with edit link -->
             <?php while ($user_row = $list_statement->fetch()): ?>
                 <li>
-                    /* show username and role with link to edit page */
+                    <!-- show username and role with link to edit page -->
                     <a href="edit_user.php?id=<?= $user_row['id'] ?>">
                         <?= $user_row['username'] ?> (<?= $user_row['role'] ?>)
                     </a>
@@ -97,7 +97,7 @@ $list_statement->execute();
             <?php endwhile; ?>
         </ul>
 
-        /* if user selected, show edit form pre-filled with user data */
+        <!-- if user selected, show edit form pre-filled with user data -->
         <?php if ($id && $user): ?>
             <form method="post" action="edit_user.php">
                 <input type="hidden" name="id" value="<?= $user['id'] ?>">

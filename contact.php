@@ -1,4 +1,4 @@
-/* contact.php - A simple contact form that validates input and displays a success message. */
+<!-- contact.php - A simple contact form that validates input and displays a success message. -->
 
 <?php
 session_start();
@@ -48,6 +48,7 @@ endif;
                         <?php endif; ?>
 
                     <?php else: ?>
+                        <li><a href="index.php">Home</a></li>
                         <li><a href="login.php">Log In</a></li>
                     <?php endif; ?>
 

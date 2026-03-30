@@ -1,5 +1,5 @@
-/* manage_users.php - A page to display all users in the database 
-with options to edit or delete them. Admin users only. */
+<!-- manage_users.php - A page to display all users in the database 
+with options to edit or delete them. Admin users only. -->
 
 <?php
 require('authenticate.php'); // 7.1 admin only access
@@ -26,14 +26,14 @@ $statement->execute();
     <main>
         <h1>Manage Users</h1>
 
-        /* display number of users found */
+        <!-- display number of users found -->
         <h2>Found <?= $statement->rowCount() ?> Users</h2>
 
         <ul class="user-list">
-            /* loop through users and display with edit link */
+            <!-- loop through users and display with edit link -->
             <?php while ($user = $statement->fetch()): ?>
                 <li>
-                    /* show user info and link to edit page */
+                    <!-- show user info and link to edit page -->
                     ID: <?= $user['id'] ?> |
                     Username: <?= $user['username'] ?> |
                     Role: <?= $user['role'] ?>

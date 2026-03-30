@@ -1,5 +1,5 @@
-/* create_user.php - A form to create a new user in the database.
-Validates input, hashes password, and displays a success message. Admin users only. */
+<!-- create_user.php - A form to create a new user in the database.
+Validates input, hashes password, and displays a success message. Admin users only. -->
 
 <?php
 require('authenticate.php'); // 7.1 page for admin users only

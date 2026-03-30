@@ -1,5 +1,5 @@
-// admin.php - Makes sure user is admin,
-// then shows admin dashboard with links to admin functions
+<!-- admin.php - Makes sure user is admin,
+ then shows admin dashboard with links to admin functions -->
 <?php
 session_start();
 
