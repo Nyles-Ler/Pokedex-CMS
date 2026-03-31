@@ -163,13 +163,14 @@ endif;
 		        <label for="type1">Primary Type</label>
 		        <select id="type1" name="type1" required>
 		            <option value="">Select a type</option>
-                    /* show types in dropdown */
+                    <!-- show types in dropdown -->
 		            <?php while ($type = $types_statement->fetch()): ?>
-                        /* show type as option in dropdown */
+                        <!-- show type as option in dropdown -->
 		                <option value="<?= $type['name'] ?>"><?= $type['name'] ?></option>
 		            <?php endwhile; ?>
 		        </select>
 
+                <!-- re-query types for the secondary type dropdown -->
 		        <?php
 		        $types_statement = $db->prepare($types_query);
 		        $types_statement->execute();
@@ -178,7 +179,7 @@ endif;
 		        <label for="type2">Secondary Type</label>
 		        <select id="type2" name="type2">
 		            <option value="">No secondary type</option>
-                    /* show types in dropdown */
+                    <!-- show types in dropdown -->
 		            <?php while ($type = $types_statement->fetch()): ?>
 		                <option value="<?= $type['name'] ?>"><?= $type['name'] ?></option>
 		            <?php endwhile; ?>

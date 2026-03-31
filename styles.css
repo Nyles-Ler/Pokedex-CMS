@@ -157,17 +157,24 @@ header button:hover {
     margin: 5px 0;
     padding: 10px 12px;
 
-    background: linear-gradient(135deg, #d9f99d, #a0e7e5);
+    background: none;
     border: 4px solid #222;
     border-radius: 20px;
     box-shadow: 6px 6px 0 #222;
 }
 
+.admin-dashboard-row {
+    width: 100%;
+    padding: 8px 10px;
+    background: transparent;
+}
+
 #admin-dashboard {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 12px;
     flex-wrap: wrap;
+    margin: 0;
 }
 
 #admin-dashboard h3 {
@@ -190,7 +197,7 @@ header button:hover {
 
 .admin-links {
     list-style: none;
-    margin: 20px 0 0 0;
+    margin: 0;
     padding: 0;
     text-align: center;
 }
@@ -273,7 +280,7 @@ aside {
 
 section {
     flex: 1;
-    background-color: #fff;
+    background-color: transparent;
 }
 
 aside nav ul {
@@ -349,7 +356,7 @@ aside p {
 #imagecontent {
     padding: 20px;
     margin: 25px 0;
-    background: linear-gradient(135deg, #ffcb05, #ffd166);
+    background: none;
     border: 4px dashed #222;
     border-radius: 20px;
     animation: pulseBox 3s infinite;
@@ -687,7 +694,7 @@ a:hover::after {
 
 .page-pokedex section,
 .page-types section {
-    background: #ffffff;
+    background: transparent;
 }
 
 .page-pokedex aside p,
@@ -786,4 +793,24 @@ a:hover::after {
 .page-types footer nav a::after,
 .imagecontent a::after {
     content: none;
+}
+
+/* Pokemon types badge colour matching */
+
+.type-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 3px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.type-badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
 }

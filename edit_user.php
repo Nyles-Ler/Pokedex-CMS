@@ -73,6 +73,7 @@ $list_query = "SELECT id, username, role FROM users ORDER BY username ASC";
 $list_statement = $db->prepare($list_query);
 $list_statement->execute();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

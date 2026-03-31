@@ -3,7 +3,27 @@ Displays a welcome message, navigation links, and an admin dashboard for logged-
 
 <?php
 session_start();
+require('db_connect.php');
 
+/* query to get all unique colors from types table for admin dashboard background */
+$color_query = "SELECT color FROM types WHERE color IS NOT NULL";
+$color_statement = $db->prepare($color_query);
+$color_statement->execute();
+
+$colors = [];
+
+while ($row = $color_statement->fetch()):
+    $colors[] = $row['color'];
+endwhile;
+
+/* create a gradient string from the colors or use a default gradient if no colors found */
+$gradient = '';
+
+if (!empty($colors)):
+    $gradient = 'linear-gradient(135deg, ' . implode(', ', $colors) . ')';
+else:
+    $gradient = 'linear-gradient(135deg, #d9f99d, #a0e7e5)';
+endif;
 ?>
 
 <!DOCTYPE html>
@@ -28,13 +48,6 @@ session_start();
 						<!-- show login/logout links based on session -->
 						<?php if (isset($_SESSION['user_id'])): ?>
 							<li><a href="logout.php">Log Out</a></li>
-
-							<!-- if admin, show link to admin dashboard -->
-							<?php if ($_SESSION['role'] === 'admin'): ?>
-								<!-- show link to admin dashboard for admin users -->
-								<li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
-							<?php endif; ?>
-
 							<?php else: ?>
 								<li><a href="login.php">Log In</a></li>
 						<?php endif; ?>
@@ -54,28 +67,24 @@ session_start();
 			<div id="mainheading">
 				<h1>Kowski Komics Local Pokédex</h1>
 				<h2><i>Discover your favourite Pokémon and learn more about them!</i></h2>
+
+			<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
+	        <div class="admin-dashboard-row">
+	            <article id="admin-dashboard" class="admin-card" style="background: <?= htmlspecialchars($gradient) ?>;">
+	                <h3>Admin Dashboard</h3>
+	                <p>Welcome back, <?= $_SESSION['username']; ?>!</p>
+	                <nav aria-label="Admin-Navigation">
+	                    <ul class="admin-links">
+	                        <li><a href="create_pokemon.php">Create Pokemon</a></li>
+	                        <li><a href="edit_pokemon.php">Update Pokemon</a></li>
+	                        <li><a href="delete_pokemon.php">Delete Pokemon</a></li>
+	                        <li><a href="manage_users.php">Manage User</a></li>
+	                    </ul>
+	                </nav>
+	            </article>
+	        </div>
+	        <?php endif; ?> 
 			</div>
-			
-			<!-- if user is logged in and is admin, show admin dashboard section -->
-				<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
-				<section>
-					<article id="admin-dashboard" class="admin-card">
-						<h3>Admin Dashboard</h3>
-						<p>Welcome back, <?= $_SESSION['username']; ?>!</p>
-						<nav aria-label="Admin-Navigation">
-							<ul class="admin-links">
-								<li><a href="create_pokemon.php">Create Pokemon</a></li>
-								<li><a href="edit_pokemon.php">Update Pokemon</a></li>
-								<li><a href="delete_pokemon.php">Delete Pokemon</a></li>
-								<li><a href="manage_users.php">View Users</a></li>
-								<li><a href="create_user.php">Create User</a></li>
-								<li><a href="edit_users.php">Edit User</a></li>
-								<li><a href="dele_user.php">Manage User</a></li>
-							</ul>
-						</nav>
-					</article>
-				</section>
-				<?php endif; ?>		
 
 			<div id="navrow">
 				<nav aria-label="Main Navigation">
@@ -89,12 +98,12 @@ session_start();
 			<aside>
 				<nav aria-label="Sidebar Navigation">
 					<ul>
-						<li><a href="#">About Kowski Komics</a></li>
-						<li><a href="#">Store Events</a></li>
-						<li><a href="#">Meet the Staff</a></li>
-						<li><a href="#">News & Blog</a></li>
-						<li><a href="#">Frequently Asked Questions</a></li>
-						<li><a href="#">Join the Kowski Mailing List</a></li>
+						<li><a href="under_maintenance.php">About Kowski Komics</a></li>
+						<li><a href="under_maintenance.php">Store Events</a></li>
+						<li><a href="under_maintenance.php">Meet the Staff</a></li>
+						<li><a href="under_maintenance.php">News & Blog</a></li>
+						<li><a href="under_maintenance.php">Frequently Asked Questions</a></li>
+						<li><a href="under_maintenance.php">Join the Kowski Mailing List</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
@@ -128,8 +137,8 @@ session_start();
 					<nav aria-label="Middle Navigation">
         				<ul>
           					<li><a href="kowskis_message.php">A message from Kowski</a></li>
-          					<li><a href="#">Upcoming Events</a></li>
-          					<li><a href="#">Meet our Team!</a></li>
+          					<li><a href="under_maintenance.php">Upcoming Events</a></li>
+          					<li><a href="under_maintenance.php">Meet our Team!</a></li>
         				</ul>
       				</nav>
 				</div>
@@ -139,10 +148,10 @@ session_start();
 			<footer>
 				<nav aria-label="Footer Navigation">
 					<ul>
-						<li><a href="#">Home</a></li>
+						<li><a href="index.php">Home</a></li>
 						<li><a href="pokedex.php">Pokedex</a></li>
 						<li><a href="pokemontypes.php">Pokemon Types</a></li>
-						<li><a href="#">Our Staff</a></li>
+						<li><a href="under_maintenance.php">Our Staff</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>

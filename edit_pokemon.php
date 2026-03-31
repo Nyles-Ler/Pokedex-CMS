@@ -122,6 +122,7 @@ $list_query = "SELECT id, pokedex_number, name FROM pokemon ORDER BY pokedex_num
 $list_statement = $db->prepare($list_query);
 $list_statement->execute();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

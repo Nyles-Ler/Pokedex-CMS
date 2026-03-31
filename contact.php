@@ -44,15 +44,13 @@ endif;
                         <li><a href="logout.php">Log Out</a></li>
 
                         <?php if ($_SESSION['role'] === 'admin'): ?>
-                            <li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
+                            <li><a href="index.php">Home</a></li>
                         <?php endif; ?>
 
                     <?php else: ?>
                         <li><a href="index.php">Home</a></li>
                         <li><a href="login.php">Log In</a></li>
                     <?php endif; ?>
-
-                    <li><a href="contact.php">Contact Us</a></li>
                 </ul>
             </nav>
         </header>

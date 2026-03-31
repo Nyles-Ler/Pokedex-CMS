@@ -25,6 +25,7 @@ $list_query = "SELECT id, pokedex_number, name, type1, type2 FROM pokemon ORDER 
 $list_statement = $db->prepare($list_query);
 $list_statement->execute();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,18 +42,18 @@ $list_statement->execute();
 		<main>
 		    <h1>Delete Pokémon</h1>
 
-            /* display success message if set */
+            <!-- display success message if set -->
 		    <?php if (isset($message)): ?>
 		        <p><?= $message ?></p>
 		    <?php endif; ?>
 
 		    <ul class="pokemon-list">
-                /* loop through Pokémon and display with delete form */
+                <!-- loop through Pokémon and display with delete form -->
 		        <?php while ($pokemon = $list_statement->fetch()): ?>
 		            <li>
-                        /* show Pokémon name and types */
+                        <!-- show Pokémon name and types -->
 		                #<?= $pokemon['pokedex_number'] ?> - <?= $pokemon['name'] ?>
-                        /* show types if they exist */
+                        <!-- show types if they exist -->
 		                (<?= $pokemon['type1'] ?><?= $pokemon['type2'] ? ' / ' . $pokemon['type2'] : '' ?>)
 
 		                <form method="post" action="delete_pokemon.php" style="display:inline;">
