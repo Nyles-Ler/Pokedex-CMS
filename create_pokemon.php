@@ -15,10 +15,13 @@ $types_query = "SELECT name FROM types ORDER BY name ASC";
 $types_statement = $db->prepare($types_query);
 $types_statement->execute();
 
+/* handle image upload if file was submitted */
 $image_path = null;
 
+/* check if file was uploaded without errors */
 if (isset($_FILES['image']) && $_FILES['image']['error'] === 0):
 
+    /* sanitize file name and get temporary path */
     $image_filename = basename($_FILES['image']['name']);
     $temporary_path = $_FILES['image']['tmp_name'];
 
@@ -41,7 +44,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === 0):
     else:
         $image_message = "Invalid image type. Only JPG, PNG, GIF allowed.";
     endif;
-
+/* handle file upload errors */
 elseif (isset($_FILES['image']) && $_FILES['image']['error'] > 0):
     $image_message = "Error uploading file.";
 endif;
