@@ -1,49 +1,102 @@
 <!-- pokedex.php - A page to display all Pokémon entries in the database. -->
-
 <?php
 session_start();
 require('db_connect.php');
 
-/* query all Pokémon from database */
+
+/* 2.3 view list of pages/products with database-level sorting */
+/* 6.1 display uploaded images from images table */
+/* 2.7 allow users to navigate to one content item */
+/* 2.8 navigate pages by way of their association */
+/* 3.1 Search for specific pages by keyword */
+/* 3.2 search for specific pages by keyword while limiting search categories */
+
+/* get sanitized sorting, type filters, search option from URL */
+$sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$type_filter = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+$conditions = [];
+$params = [];
+
+/* filter by type, checks if values are empty */
+if (!empty($type_filter)) {
+    $conditions[] = "(pokemon.type1 = :type_filter OR pokemon.type2 = :type_filter)";
+    /*uses prepared statments and bound parameters */
+    $params[':type_filter'] = $type_filter;
+}
+
+/* search by keyword, checks if values are empty */
+if (!empty($search)) {
+    $conditions[] = "(pokemon.name LIKE :search
+                    OR pokemon.description LIKE :search
+                    OR pokemon.type1 LIKE :search
+                    OR pokemon.type2 LIKE :search)";
+    /*uses prepared statments and bound parameters */
+    $params[':search'] = '%' . $search . '%';
+}
+
+$where_clause = '';
+
+if (!empty($conditions)) {
+    $where_clause = 'WHERE ' . implode(' AND ', $conditions);
+}
+
+/* choose sort order at database level */
+$order_by = "pokemon.name ASC";
+$current_sort = "Name (A-Z)";
+
+if ($sort === 'name_desc') {
+    $order_by = "pokemon.name DESC";
+    $current_sort = "Name (Z-A)";
+} elseif ($sort === 'created_desc') {
+    $order_by = "pokemon.created_at DESC";
+    $current_sort = "Newest to Oldest";
+} elseif ($sort === 'created_asc') {
+    $order_by = "pokemon.created_at ASC";
+    $current_sort = "Oldest to Newest";
+} elseif ($sort === 'updated_desc') {
+    $order_by = "pokemon.updated_at DESC";
+    $current_sort = "Recently Updated";
+} elseif ($sort === 'updated_asc') {
+    $order_by = "pokemon.updated_at ASC";
+    $current_sort = "Least Recently Updated";
+}
+
 $query = "
-    SELECT pokemon.*, types.color AS type_color
+    SELECT pokemon.*, images.file_name, types.color AS type_color
     FROM pokemon
+    LEFT JOIN images ON pokemon.id = images.pokemon_id
     LEFT JOIN types ON pokemon.type1 = types.name
-    ORDER BY pokedex_number ASC
+    $where_clause
+    ORDER BY $order_by
 ";
+
 $statement = $db->prepare($query);
+
+foreach ($params as $key => $value) {
+    $statement->bindValue($key, $value);
+}
+
 $statement->execute();
 
-/* query one random Pokémon for the pokemon for featured */
-$featured_query = "SELECT * FROM pokemon ORDER BY RAND() LIMIT 1";
+$type_query = "SELECT name FROM types ORDER BY name ASC";
+$type_statement = $db->prepare($type_query);
+$type_statement->execute();
+$types = $type_statement->fetchAll();
+
+/* query one random Pokémon for featured section */
+$featured_query = "
+    SELECT pokemon.*, images.file_name
+    FROM pokemon
+    LEFT JOIN images ON pokemon.id = images.pokemon_id
+    ORDER BY RAND()
+    LIMIT 1
+";
 $featured_statement = $db->prepare($featured_query);
 $featured_statement->execute();
 $featured_pokemon = $featured_statement->fetch();
-$query = "
-    SELECT pokemon.*, types.color AS type_color
-    FROM pokemon
-    LEFT JOIN types ON pokemon.type1 = types.name
-    ORDER BY pokedex_number ASC
-";
-$statement = $db->prepare($query);
-$statement->execute();
-
-/* query db for admin dashboard colour types gradient */
-$color_query = "SELECT color FROM types WHERE color IS NOT NULL";
-$color_statement = $db->prepare($color_query);
-$color_statement->execute();
-$colors = [];
-while ($row = $color_statement->fetch()):
-    $colors[] = $row['color'];
-endwhile;
-$gradient = '';
-if (!empty($colors)):
-    $gradient = 'linear-gradient(135deg, ' . implode(', ', $colors) . ')';
-else:
-    $gradient = 'linear-gradient(135deg, #d9f99d, #a0e7e5)';
-endif;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,86 +113,110 @@ endif;
     <main>
         <header>
             <img class="Kowskilogo" src="images/kowskilogo.jpg" alt="Kowski Komics Logo">
-
+        
             <nav aria-label="User Navigation">
                 <ul>
+                    <li><a href="index.php">Home</a></li>
                     <!-- show login/logout links based on session -->
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="logout.php">Log Out</a></li>
-
-                        <!-- if admin, show link to admin dashboard -->
-                        <?php if ($_SESSION['role'] === 'admin'): ?>
-                            <li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
-                        <?php endif; ?>
-
-                    <?php else: ?>
-                        <li><a href="login.php">Log In</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php">Log In</a></li>
+                            <li><a href="register_user.php">Register</a></li>
+                            <li><a href="forgot_password.php">Forgot Password</a></li>
                     <?php endif; ?>
-
-                    <li><a href="forgot_password.php">Forgot Password</a></li>
                     <li><a href="contact.php">Contact Us</a></li>
                 </ul>
             </nav>
 
-            <div class="search-group">
+            <form method="get" action="pokedex.php" class="search-group">
                 <label for="search">Search</label>
-                <input id="search" type="text">
+                <input 
+                    id="search" 
+                    type="text" 
+                    name="search" 
+                    value="<?= htmlspecialchars($search ?? '') ?>"
+                    placeholder="Search Pokémon..."
+                >
+
+                <label for="type">Category</label>
+                <select name="type" id="type">
+                    <option value="">All Categories</option>
+                    <?php foreach ($types as $type): ?>
+                        <option value="<?= htmlspecialchars($type['name']) ?>"
+                            <?= ($type_filter === $type['name']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($type['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <?php if (!empty($sort)): ?>
+                    <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
+                <?php endif; ?>
+
                 <button type="submit">Search</button>
-            </div>
+            </form>
         </header>
 
         <div id="mainheading">
             <h1>Kowski Komics Local Pokédex</h1>
             <h2><i>Browse all Pokémon in the database</i></h2>
+
+            <!-- if user is logged in and is admin, show admin dashboard section -->
+            <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
+            <div class="admin-dashboard-row">
+                <article id="admin-dashboard" class="admin-card">
+                    <h3>Admin Dashboard</h3>
+                    <p>Welcome back, <?= htmlspecialchars($_SESSION['username']) ?>!</p>
+                    <nav aria-label="Admin-Navigation">
+                        <ul class="admin-links">
+                            <li><a href="create_pokemon.php">Create Pokemon</a></li>
+                            <li><a href="edit_pokemon.php">Update Pokemon</a></li>
+                            <li><a href="delete_pokemon.php">Delete Pokemon</a></li>
+                            <li><a href="manage_users.php">Manage User</a></li>
+                        </ul>
+                    </nav>
+                </article>
+            </div>
+            <?php endif; ?> 
         </div>
 
         <div id="navrow">
-        <!-- if user is logged in and is admin, show admin dashboard section -->
-        <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
-        <div class="admin-dashboard-row">
-            <article id="admin-dashboard" class="admin-card" style="background: <?= htmlspecialchars($gradient) ?>;">
-                <h3>Admin Dashboard</h3>
-                <p>Welcome back, <?= $_SESSION['username']; ?>!</p>
-                <nav aria-label="Admin-Navigation">
-                    <ul class="admin-links">
-                        <li><a href="create_pokemon.php">Create Pokemon</a></li>
-                        <li><a href="edit_pokemon.php">Update Pokemon</a></li>
-                        <li><a href="delete_pokemon.php">Delete Pokemon</a></li>
-                        <li><a href="manage_users.php">Manage User</a></li>
-                    </ul>
-                </nav>
-            </article>
-        </div>
-        <?php endif; ?> 
             <nav aria-label="Main Navigation">
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="pokedex.php">Browse Pokédex</a></li>
-                    <li><a href="pokemontypes.php">Explore Pokémon Types</a></li>
+                    <li class="dropdown">
+                        <a href="pokedex.php">Types ▾</a>
+
+                        <ul class="dropdown-menu">
+                            <?php foreach ($types as $type): ?>
+                                <li>
+                                    <a href="pokedex.php?type=<?= urlencode($type['name']) ?>">
+                                        <?= htmlspecialchars($type['name']) ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div> 
 
-        <!-- sidebar with featured Pokémon -->
         <aside>
             <?php if ($featured_pokemon): ?>
                 <p>
-                    <!-- if Pokémon has image, show it, otherwise show placeholder image -->
-                    <?php if (!empty($featured_pokemon['image'])): ?>
-                        <img class="pokemon" src="<?= htmlspecialchars($featured_pokemon['image']) ?>" alt="<?= htmlspecialchars($featured_pokemon['name']) ?>">
-                    <?php else: ?>
-                        <img class="pokemon" src="images/pikachu.png" alt="Pokemon placeholder">
+                    <?php if (!empty($featured_pokemon['file_name'])): ?>
+                        <img class="pokemon" src="uploads/<?= htmlspecialchars($featured_pokemon['file_name']) ?>" alt="<?= htmlspecialchars($featured_pokemon['name']) ?>">
                     <?php endif; ?>
-                    
+
                     <strong>Featured Pokemon:</strong><br>
-                    <!-- show Pokémon name and description, with special characters escaped 
-                     for security -->
                     <?= htmlspecialchars($featured_pokemon['name']) ?><br><br>
                     <?= htmlspecialchars($featured_pokemon['description']) ?>
                 </p>
             <?php else: ?>
                 <p>
-                    <img class="pokemon" src="images/pikachu.png" alt="Pikachu">
+                    <img class="pokemon" src="images/pokeball.png" alt="Pokeball Placeholder">
                     No Pokemon available yet.
                 </p>
             <?php endif; ?>
@@ -148,62 +225,66 @@ endif;
         <section>
             <article id="content">
                 <h3>Pokédex Entries</h3>
-                
-                <!-- if Pokémon found, loop through and display each entry -->
-                <?php if ($statement->rowCount() > 0): ?>
-                    <!-- loop through Pokémon and display details, with special 
-                     characters escaped for security -->
-                    <?php while ($pokemon = $statement->fetch()): ?>
-                        <p class="p1">
-                            <strong>#<?= $pokemon['pokedex_number'] ?> - <?= htmlspecialchars($pokemon['name']) ?></strong>
+
+                <div id="middlelinks">
+                    <ul>
+                        <li><a href="pokedex.php<?= (!empty($search) || !empty($type_filter)) ? '?' : '' ?><?= !empty($search) ? 'search=' . urlencode($search) : '' ?><?= (!empty($search) && !empty($type_filter)) ? '&' : '' ?><?= !empty($type_filter) ? 'type=' . urlencode($type_filter) : '' ?>">Name A-Z</a></li>
+                        <li><a href="pokedex.php?sort=name_desc<?= !empty($type_filter) ? '&type=' . urlencode($type_filter) : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">Name Z-A</a></li>
+                        <li><a href="pokedex.php?sort=created_desc<?= !empty($type_filter) ? '&type=' . urlencode($type_filter) : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">Newest to Oldest</a></li>
+                        <li><a href="pokedex.php?sort=created_asc<?= !empty($type_filter) ? '&type=' . urlencode($type_filter) : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">Oldest to Newest</a></li>
+                        <li><a href="pokedex.php?sort=updated_desc<?= !empty($type_filter) ? '&type=' . urlencode($type_filter) : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">Recently Updated</a></li>
+                        <li><a href="pokedex.php?sort=updated_asc<?= !empty($type_filter) ? '&type=' . urlencode($type_filter) : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">Least Recently Updated</a></li>
+                    </ul>
+                    <div class="current-filters">
+                        <p>
+                            <strong>Sort:</strong> <?= htmlspecialchars($current_sort) ?>
                         </p>
 
-                        <p class="middle-paragraph">
-                            <strong>Type:</strong>
-                            <?= htmlspecialchars($pokemon['type1']) ?>
-                            <?= $pokemon['type2'] ? ' / ' . htmlspecialchars($pokemon['type2']) : '' ?>
+                        <p>
+                            <strong>Type Category:</strong> <?= !empty($type_filter) ? htmlspecialchars($type_filter) : 'All Categories' ?>
                         </p>
-                        <!-- show Pokémon image and stats, with special characters escaped 
-                         for security -->
-                        <div class="imagecontent" style="background: linear-gradient(135deg, <?= htmlspecialchars($pokemon['type_color']) ?>, #ffffff);">
-                            <?php if (!empty($pokemon['image'])): ?>
-                                <img class="pokemon" src="<?= htmlspecialchars($pokemon['image']) ?>" alt="<?= htmlspecialchars($pokemon['name']) ?>">
-                            <?php else: ?>
-                                <img class="pokemon" src="images/pikachu.png" alt="Pokémon placeholder">
+
+                        <?php if (!empty($search)): ?>
+                        <p>
+                            <strong>Search:</strong> <?= htmlspecialchars($search) ?>
+                        </p>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- if Pokémon found, loop through and display each entry -->
+                    <?php while ($pokemon = $statement->fetch()): ?>
+                        <div class="imagecontent" style="background: linear-gradient(135deg, <?= htmlspecialchars($pokemon['type_color']) ?>, #ffffff); cursor: pointer;" onclick="window.location.href='pokemon.php?id=<?= $pokemon['id'] ?>'">
+
+                            <?php if (!empty($pokemon['file_name'])): ?>
+                                <img class="pokemon" src="uploads/<?= htmlspecialchars($pokemon['file_name']) ?>" alt="<?= htmlspecialchars($pokemon['name']) ?>">
                             <?php endif; ?>
 
                             <div>
-                                <p><strong>HP:</strong> <?= $pokemon['hp'] ?></p>
-                                <p><strong>Attack:</strong> <?= $pokemon['attack_stat'] ?></p>
-                                <p><strong>Defense:</strong> <?= $pokemon['defense_stat'] ?></p>
-                                <p><strong>Special Attack:</strong> <?= $pokemon['special_attack'] ?></p>
-                                <p><strong>Special Defense:</strong> <?= $pokemon['special_defense'] ?></p>
-                                <p><strong>Speed:</strong> <?= $pokemon['speed_stat'] ?></p>
+                                <p class="p1">
+                                    <a class="content-link" href="pokemon.php?id=<?= $pokemon['id'] ?>">
+                                        #<?= $pokemon['pokedex_number'] ?> - <?= htmlspecialchars($pokemon['name']) ?>
+                                    </a>
+                                </p>
 
-                                <?php if (!empty($pokemon['height'])): ?>
-                                    <p><strong>Height:</strong> <?= $pokemon['height'] ?> m</p>
-                                <?php endif; ?>
+                                <p class="middle-paragraph">
+                                    <strong>Type:</strong>
+                                    <?= htmlspecialchars($pokemon['type1']) ?>
+                                    <?= $pokemon['type2'] ? ' / ' . htmlspecialchars($pokemon['type2']) : '' ?>
+                                </p>
 
-                                <?php if (!empty($pokemon['weight'])): ?>
-                                    <p><strong>Weight:</strong> <?= $pokemon['weight'] ?> kg</p>
+                                <p class="middle-paragraph">
+                                    <strong>Click to view all Pokemon information</strong>
+                                </p>
+
+                                <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
+                                    <p class="content-link-wrap">
+                                        <a class="content-link" href="edit_pokemon.php?id=<?= $pokemon['id'] ?>">Edit</a>
+                                    </p>
                                 <?php endif; ?>
                             </div>
-                        </div>
 
-                        <p class="middle-paragraph">
-                            <strong>Description:</strong> <?= htmlspecialchars($pokemon['description']) ?>
-                        </p>
-                        
-                        <!-- if user is admin, show edit link for each Pokémon -->
-                        <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
-                            <p class="middle-paragraph">
-                                <a href="edit_pokemon.php?id=<?= $pokemon['id'] ?>">Edit</a>
-                            </p>
-                        <?php endif; ?>
+                        </div>
                     <?php endwhile; ?>
-                <?php else: ?>
-                    <p class="middle-paragraph">No Pokémon have been added yet.</p>
-                <?php endif; ?>
             </article>
         </section>
 
@@ -212,7 +293,6 @@ endif;
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="pokedex.php">Pokedex</a></li>
-                    <li><a href="pokemontypes.php">Pokemon Types</a></li>
                     <li><a href="#">Our Staff</a></li>
                     <li><a href="#">Contact Us</a></li>
                 </ul>

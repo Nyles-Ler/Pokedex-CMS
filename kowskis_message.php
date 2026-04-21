@@ -25,17 +25,15 @@ session_start();
 			
 				<nav aria-label="User Navigation">
 					<ul>
+						<li><a href="index.php">Home</a></li>
+						<!-- show login/logout links based on session -->
 						<?php if (isset($_SESSION['user_id'])): ?>
 							<li><a href="logout.php">Log Out</a></li>
-
-							<?php if ($_SESSION['role'] === 'admin'): ?>
-								<li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
-							<?php endif; ?>
-
 							<?php else: ?>
 								<li><a href="login.php">Log In</a></li>
+								<li><a href="register_user.php">Register</a></li>
+								<li><a href="forgot_password.php">Forgot Password</a></li>
 						<?php endif; ?>
-						<li><a href="forgot_password.php">Forgot Password</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
@@ -50,30 +48,29 @@ session_start();
 			<div id="mainheading">
 				<h1>Kowski Komics Local Pokédex</h1>
 				<h2><i>Discover your favourite Pokémon and learn more about them!</i></h2>
-			</div>
 
 			<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
-				<section>
-					<article id="admin-dashboard" class="admin-card">
-						<h3>Admin Dashboard</h3>
-						<p>Welcome back, <?= $_SESSION['username']; ?>!</p>
-						<nav aria-label="Admin-Navigation">
-							<ul class="admin-links">
-								<li><a href="create_pokemon.php">Create Pokemon</a></li>
-								<li><a href="edit_pokemon.php">Update Pokemon</a></li>
-								<li><a href="delete_pokemon.php">Delete Pokemon</a></li>
-								<li><a href="manage_users.php">Manage Users</a></li>
-							</ul>
-						</nav>
-					</article>
-				</section>
-			<?php endif; ?>			
+	        <div class="admin-dashboard-row">
+	            <article id="admin-dashboard" class="admin-card">
+	                <h3>Admin Dashboard</h3>
+	                <p>Welcome back, <?= $_SESSION['username']; ?>!</p>
+	                <nav aria-label="Admin-Navigation">
+	                    <ul class="admin-links">
+	                        <li><a href="create_pokemon.php">Create Pokemon</a></li>
+	                        <li><a href="edit_pokemon.php">Update Pokemon</a></li>
+	                        <li><a href="delete_pokemon.php">Delete Pokemon</a></li>
+	                        <li><a href="manage_users.php">Manage User</a></li>
+	                    </ul>
+	                </nav>
+	            </article>
+	        </div>
+	        <?php endif; ?> 
+			</div>
 
 			<div id="navrow">
 				<nav aria-label="Main Navigation">
 					<ul>
 						<li><a href="pokedex.php">Browse Pokédex</a></li>
-						<li><a href="pokemontypes.php">Explore Pokémon Types</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -81,12 +78,12 @@ session_start();
 			<aside>
 				<nav aria-label="Sidebar Navigation">
 					<ul>
-						<li><a href="#">About Kowski Komics</a></li>
-						<li><a href="#">Store Events</a></li>
-						<li><a href="#">Meet the Staff</a></li>
-						<li><a href="#">News & Blog</a></li>
-						<li><a href="#">Frequently Asked Questions</a></li>
-						<li><a href="#">Join the Kowski Mailing List</a></li>
+						<li><a href="under_maintenance.php">About Kowski Komics</a></li>
+						<li><a href="under_maintenance.php">Store Events</a></li>
+						<li><a href="under_maintenance.php">Meet the Staff</a></li>
+						<li><a href="under_maintenance.php">News & Blog</a></li>
+						<li><a href="under_maintenance.php">Frequently Asked Questions</a></li>
+						<li><a href="under_maintenance.php">Join the Kowski Mailing List</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
@@ -97,17 +94,21 @@ session_start();
 			
 		<section>
 			<article id="content">
-  				<p class="middle-paragraph">Here is my message: I pity da foo!</p>
+  				<h3>Here is my message.</h3>
+  				<p class="p1">I pity da fool!</p>
 			</article>
+
+			<p class="content-link-wrap">
+                <a class="content-link" href="index.php">Back to Home</a>
+            </p>
 		</section>
 
 			<footer>
 				<nav aria-label="Footer Navigation">
 					<ul>
-						<li><a href="#">Home</a></li>
+						<li><a href="index.php">Home</a></li>
 						<li><a href="pokedex.php">Pokedex</a></li>
-						<li><a href="pokemontypes.php">Pokemon Types</a></li>
-						<li><a href="#">Our Staff</a></li>
+						<li><a href="under_maintenance.php">Our Staff</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>

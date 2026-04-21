@@ -1,4 +1,4 @@
-<!-- forgot_password.php - A simple form to check if a username exists in the database. -->
+<!-- forgot_password.php - A simple form to check if a username exists in the database.-->
 
 <?php
 session_start();
@@ -44,25 +44,27 @@ endif;
     <main>
         <header>
             <img class="Kowskilogo" src="images/kowskilogo.jpg" alt="Kowski Komics Logo">
-
+        
             <nav aria-label="User Navigation">
                 <ul>
+                    <li><a href="index.php">Home</a></li>
                     <!-- show login/logout links based on session -->
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="logout.php">Log Out</a></li>
-
-                        <!-- if admin, show link to admin dashboard -->
-                        <?php if ($_SESSION['role'] === 'admin'): ?>
-                            <li><a href="index.php#admin-dashboard">Admin Dashboard</a></li>
-                        <?php endif; ?>
-
-                    <?php else: ?>
-                        <li><a href="login.php">Log In</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php">Log In</a></li>
+                            <li><a href="register_user.php">Register</a></li>
+                            <li><a href="forgot_password.php">Forgot Password</a></li>
                     <?php endif; ?>
-
                     <li><a href="contact.php">Contact Us</a></li>
                 </ul>
             </nav>
+
+            <div class="search-group">
+                <label for="search">Search</label>
+                <input id="search" type="text">
+                <button type="submit">Search</button>
+            </div>
         </header>
 
         <div id="mainheading">
@@ -99,7 +101,6 @@ endif;
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="pokedex.php">Pokedex</a></li>
-                    <li><a href="pokemontypes.php">Pokemon Types</a></li>
                     <li><a href="contact.php">Contact Us</a></li>
                 </ul>
             </nav>

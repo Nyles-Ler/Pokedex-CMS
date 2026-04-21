@@ -5,15 +5,20 @@ session_start();
 
 $success = false;
 
+/* checks if form is submitted using POST*/
 if ($_POST
+    /* check if fields are not empty */
     && !empty($_POST['name'])
     && !empty($_POST['email'])
     && !empty($_POST['message'])):
 
+    /* sanitzed name */
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    /* validate email */
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    /* sanitize message */
     $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+    /* success if user input is valid email */
     if ($email):
         // Doesnt do anything
         $success = true;
@@ -37,22 +42,27 @@ endif;
     <main>
         <header>
             <img class="Kowskilogo" src="images/kowskilogo.jpg" alt="Kowski Komics Logo">
-
+        
             <nav aria-label="User Navigation">
                 <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <!-- show login/logout links based on session -->
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="logout.php">Log Out</a></li>
-
-                        <?php if ($_SESSION['role'] === 'admin'): ?>
-                            <li><a href="index.php">Home</a></li>
-                        <?php endif; ?>
-
-                    <?php else: ?>
-                        <li><a href="index.php">Home</a></li>
-                        <li><a href="login.php">Log In</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php">Log In</a></li>
+                            <li><a href="register_user.php">Register</a></li>
+                            <li><a href="forgot_password.php">Forgot Password</a></li>
                     <?php endif; ?>
+                    <li><a href="contact.php">Contact Us</a></li>
                 </ul>
             </nav>
+
+            <div class="search-group">
+                <label for="search">Search</label>
+                <input id="search" type="text">
+                <button type="submit">Search</button>
+            </div>
         </header>
 
         <div id="mainheading">
@@ -99,7 +109,6 @@ endif;
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="pokedex.php">Pokedex</a></li>
-                    <li><a href="pokemontypes.php">Pokemon Types</a></li>
                     <li><a href="contact.php">Contact Us</a></li>
                 </ul>
             </nav>

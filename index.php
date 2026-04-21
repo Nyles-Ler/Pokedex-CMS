@@ -5,25 +5,6 @@ Displays a welcome message, navigation links, and an admin dashboard for logged-
 session_start();
 require('db_connect.php');
 
-/* query to get all unique colors from types table for admin dashboard background */
-$color_query = "SELECT color FROM types WHERE color IS NOT NULL";
-$color_statement = $db->prepare($color_query);
-$color_statement->execute();
-
-$colors = [];
-
-while ($row = $color_statement->fetch()):
-    $colors[] = $row['color'];
-endwhile;
-
-/* create a gradient string from the colors or use a default gradient if no colors found */
-$gradient = '';
-
-if (!empty($colors)):
-    $gradient = 'linear-gradient(135deg, ' . implode(', ', $colors) . ')';
-else:
-    $gradient = 'linear-gradient(135deg, #d9f99d, #a0e7e5)';
-endif;
 ?>
 
 <!DOCTYPE html>
@@ -45,14 +26,15 @@ endif;
 			
 				<nav aria-label="User Navigation">
 					<ul>
+						<li><a href="index.php">Home</a></li>
 						<!-- show login/logout links based on session -->
 						<?php if (isset($_SESSION['user_id'])): ?>
 							<li><a href="logout.php">Log Out</a></li>
 							<?php else: ?>
 								<li><a href="login.php">Log In</a></li>
+								<li><a href="register_user.php">Register</a></li>
+								<li><a href="forgot_password.php">Forgot Password</a></li>
 						<?php endif; ?>
-						<li><a href="index.php">Home</a></li>
-						<li><a href="forgot_password.php">Forgot Password</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>
 				</nav>
@@ -70,7 +52,7 @@ endif;
 
 			<?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
 	        <div class="admin-dashboard-row">
-	            <article id="admin-dashboard" class="admin-card" style="background: <?= htmlspecialchars($gradient) ?>;">
+	            <article id="admin-dashboard" class="admin-card">
 	                <h3>Admin Dashboard</h3>
 	                <p>Welcome back, <?= $_SESSION['username']; ?>!</p>
 	                <nav aria-label="Admin-Navigation">
@@ -90,7 +72,6 @@ endif;
 				<nav aria-label="Main Navigation">
 					<ul>
 						<li><a href="pokedex.php">Browse Pokédex</a></li>
-						<li><a href="pokemontypes.php">Explore Pokémon Types</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -150,7 +131,6 @@ endif;
 					<ul>
 						<li><a href="index.php">Home</a></li>
 						<li><a href="pokedex.php">Pokedex</a></li>
-						<li><a href="pokemontypes.php">Pokemon Types</a></li>
 						<li><a href="under_maintenance.php">Our Staff</a></li>
 						<li><a href="contact.php">Contact Us</a></li>
 					</ul>

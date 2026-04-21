@@ -40,7 +40,6 @@ footer {
 /* Header styling */
 header {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     background: linear-gradient(90deg, #e63946, #ff595e, #ffca3a);
@@ -386,8 +385,8 @@ aside p {
 }
 
 #middlelinks {
-    margin-top: 25px;
-    padding: 15px;
+    margin-top: 15px;
+    padding: 10px;
     background-color: #caf0f8;
     border: 4px solid #222;
     border-radius: 18px;
@@ -396,11 +395,12 @@ aside p {
 #middlelinks ul {
     list-style: none;
     text-align: center;
+    margin-bottom: 8px;
 }
 
 #middlelinks ul li {
     display: inline-block;
-    margin: 8px;
+    margin: 4px;
 }
 
 #middlelinks a {
@@ -408,7 +408,8 @@ aside p {
     text-decoration: none;
     color: white;
     background-color: #ff006e;
-    padding: 12px 18px;
+    padding: 8px 12px;
+    font-size: 1rem;
     border: 3px solid #222;
     border-radius: 12px;
     font-weight: 700;
@@ -623,9 +624,8 @@ a:hover::after {
     }
 }
 
-/* Pokedex and pokemontypes css */
-.page-pokedex,
-.page-types {
+/* Pokedex Styling */
+.page-pokedex {
     background-color: #5e5e5e;
     background-image: repeating-linear-gradient(
         45deg,
@@ -638,8 +638,7 @@ a:hover::after {
     padding: 20px 0;
 }
 
-.page-pokedex main,
-.page-types main {
+.page-pokedex main {
     background: #fff8dc;
     border: 6px solid #cc0000;
     border-radius: 24px;
@@ -647,42 +646,43 @@ a:hover::after {
     margin: 0 auto;
 }
 
-.page-pokedex header,
-.page-types header {
+.page-pokedex header {
     background: linear-gradient(90deg, #e63946, #ff595e, #ffca3a);
 }
 
-.page-pokedex #mainheading,
-.page-types #mainheading {
+.page-pokedex #mainheading {
     background: linear-gradient(to right, #cc0000 0%, #cc0000 48%, #ffffff 48%, #ffffff 52%, #222 52%, #222 56%, #ffffff 56%, #ffffff 100%);
 }
 
-.page-pokedex #mainheading h1,
-.page-types #mainheading h1 {
+.page-pokedex #mainheading h1 {
     color: #2a2a2a;
     text-shadow: 3px 3px 0 #fd0000, 5px 5px 0 #1b1b1b;
 }
 
-.page-pokedex #mainheading h2,
-.page-types #mainheading h2 {
+.page-pokedex #mainheading h2 {
     color: #2a2a2a;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #ffffff;
+    border: 3px solid #222;
+    border-radius: 16px;
+    box-shadow: 3px 3px 0 #222;
+    font-style: italic;
 }
 
-.page-pokedex #navrow,
-.page-types #navrow {
+.page-pokedex #navrow {
     background: linear-gradient(to right, #cc0000 0%, #cc0000 48%, #ffffff 48%, #ffffff 52%, #222 52%, #222 56%, #ffffff 56%, #ffffff 100%);
     border-bottom: 5px solid #1b1b1b;
 }
 
-.page-pokedex #navrow a,
-.page-types #navrow a {
+.page-pokedex #navrow a {
     color: #1b1b1b;
     background: #ffffff;
     border-radius: 999px;
 }
 
-.page-pokedex #navrow a:hover,
-.page-types #navrow a:hover {
+.page-pokedex #navrow a:hover {
     background: #cc0000;
 }
 
@@ -692,13 +692,11 @@ a:hover::after {
     border-right: 4px solid #373737;
 }
 
-.page-pokedex section,
-.page-types section {
+.page-pokedex section {
     background: transparent;
 }
 
-.page-pokedex aside p,
-.page-types aside p {
+.page-pokedex aside p {
     background: #ffffff;
     border: 4px solid #3b3b3b;
     border-radius: 20px;
@@ -706,16 +704,14 @@ a:hover::after {
     color: #1b1b1b;
 }
 
-.page-pokedex #content,
-.page-types #content {
+.page-pokedex #content {
     background: #bebebe;
     border: 4px solid #3b3b3b;
     border-radius: 24px;
     box-shadow: 5px 5px 0 #1b1b1b;
 }
 
-.page-pokedex #content h3,
-.page-types #content h3 {
+.page-pokedex #content h3 {
     color: #000000;
     border-bottom: 4px solid #3b3b3b;
 }
@@ -741,8 +737,7 @@ a:hover::after {
     transition: transform 0.35s ease;
 }
 
-.page-pokedex aside .pokemon,
-.page-types aside .pokemon {
+.page-pokedex aside .pokemon {
     width: 120px;
     max-width: 100%;
     height: auto;
@@ -759,6 +754,16 @@ a:hover::after {
     font-weight: 500;
 }
 
+.pokemon-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: #ffffff;
+    border: 3px solid #222;
+    border-radius: 14px;
+    padding: 8px 16px;
+    box-shadow: 3px 3px 0 #222;
+}
+
 .type-color-preview {
     display: inline-block;
     width: 40px;
@@ -769,13 +774,11 @@ a:hover::after {
     margin-left: 10px;
 }
 
-.page-pokedex footer,
-.page-types footer {
+.page-pokedex footer {
     background: linear-gradient(to right, #cc0000, #a30000);
 }
 
-.page-pokedex footer nav a,
-.page-types footer nav a {
+.page-pokedex footer nav a {
     color: #ffffff;
     background: #373737;
     padding: 8px 14px;
@@ -783,34 +786,147 @@ a:hover::after {
     border-radius: 999px;
 }
 
-.page-pokedex footer nav a:hover,
-.page-types footer nav a:hover {
+.page-pokedex footer nav a:hover {
     background: #cc0000;
     color: #1b1b1b;
 }
 
 .page-pokedex footer nav a::after,
-.page-types footer nav a::after,
 .imagecontent a::after {
     content: none;
 }
 
-/* Pokemon types badge colour matching */
-
-.type-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    margin: 3px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #fff;
-    text-transform: uppercase;
+/* Dropdown container */
+.dropdown {
+    position: relative;
 }
 
-.type-badge-container {
+/* Hide dropdown by default */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffffff;
+    border: 3px solid #222;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 #1b1b1b;
+    min-width: 180px;
+    z-index: 1000;
+}
+
+.dropdown-menu li {
+    display: block;
+    margin: 0;
+}
+
+/* Links inside dropdown */
+.dropdown-menu a {
+    display: block;
+    padding: 2px 4px;
+    color: #1b1b1b;
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 2px solid #ddd;
+}
+
+.dropdown-menu li:last-child a {
+    border-bottom: none;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Search, sort, and category filters Styling */
+.current-filters {
     display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
+}
+
+.current-filters p {
+    margin: 0;
+    font-size: 0.95rem;
+    background: #ffffff;
+    padding: 6px 12px;
+    border: 2px solid #222;
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 #222;
+    font-weight: 700;
+}
+
+/* Comments styling */
+.comments-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 4px solid #3b3b3b;
+}
+
+.comment-form {
+    width: 100%;
+    max-width: none;
+    margin: 20px 0;
+    padding: 20px;
+    background: #d7d7d7;
+    border: 3px solid #3b3b3b;
+    border-radius: 18px;
+    box-shadow: 4px 4px 0 #1b1b1b;
+}
+
+.comment-card {
+    margin-top: 16px;
+    padding: 16px;
+    background: #ffffff;
+    border: 3px solid #3b3b3b;
+    border-radius: 16px;
+    box-shadow: 3px 3px 0 #1b1b1b;
+}
+
+/* Comment moderation styling */
+.comment-moderation-form {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.comment-moderation-form button {
+    padding: 6px 12px;
+    border: 2px solid #222;
+    border-radius: 10px;
+    background: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 #222;
+    transition: all 0.2s ease;
+}
+
+.comment-moderation-form button:hover {
+    background: #cc0000;
+    color: #ffffff;
+}
+
+/* Captcha and Captcha Error Styling */
+.captcha-image {
+    display: block;
+    margin: 10px 0;
+    border: 3px solid #222;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 #222;
+    background: #ffffff;
+}
+
+.captcha-error {
+    color: #cc0000;
+    font-weight: 700;
+    margin-top: 6px;
+    font-size: 1rem;
 }
