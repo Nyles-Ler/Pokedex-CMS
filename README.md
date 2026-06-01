@@ -38,17 +38,27 @@ A full-stack Pokémon-themed Content Management System (CMS) developed for my We
 ## Homepage
 Modern responsive homepage with custom branding and navigation.
 
+![Home Page Screenshot](screenshots/homepage.png)
+
 ## Pokédex Database Interface
 Searchable and filterable Pokémon listing system connected to a MySQL database.
+
+![Pokédex Interface Screenshot](screenshots/database-interface-page.png)
 
 ## Dynamic Pokémon Listings
 Interactive Pokémon cards with sorting and category filtering.
 
+![Pokemon Listings Screenshot](screenshots/pokemon-listing-page.png)
+
 ## Pokémon Detail Page
 Displays Pokémon statistics, descriptions, type information, and user comments.
 
+![Pokémon Detail Screenshot](screenshots/detail-page.png)
+
 ## Admin Creation Panel
 Admin-only interface for creating and managing Pokémon entries.
+
+![Pokémon Creation Panel Screenshot](screenshots/admin-page.png)
 
 ---
 
