@@ -16,7 +16,7 @@
 		8080
 	],
 	"features": {
-		"ghcr.io/devcontainer-config/features/dot-config:4": {}
+		"ghcr.io/devcontainer-config/features/dot-config:5": {}
 	}
 
 	// Use 'postCreateCommand' to run commands after the container is created.
